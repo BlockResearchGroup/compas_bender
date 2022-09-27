@@ -99,22 +99,25 @@
 <h1>BendNetwork</h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="compas_bender.datastructures.BendNetwork">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">compas_bender.datastructures.</span></span><span class="sig-name descname"><span class="pre">BendNetwork</span></span><a class="reference external" href="https://github.com/blockresearchgroup/compas_bender/blob/master/src/compas_bender/datastructures/bendnetwork.py#L11"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">compas_bender.datastructures.</span></span><span class="sig-name descname"><span class="pre">BendNetwork</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/blockresearchgroup/compas_bender/blob/master/src/compas_bender/datastructures/bendnetwork.py#L11"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Bases: <a class="reference external" href="https://compas.dev/compas/latest/api/generated/compas.datastructures.Network.html#compas.datastructures.Network" title="(in COMPAS v1.16)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Network</span></code></a></p>
+<p>Extension of the COMPAS network data structure for
+managing the relationships between the elements of a bending-active structure
+and their individual attributes.</p>
 <p class="rubric">Methods</p>
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="compas_bender.datastructures.BendNetwork.edge_line.html#compas_bender.datastructures.BendNetwork.edge_line" title="compas_bender.datastructures.BendNetwork.edge_line"><code class="xref py py-obj docutils literal notranslate"><span class="pre">edge_line</span></code></a></p></td>
-<td><p></p></td>
+<td><p>Return the line segment corresponding to an edge.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="compas_bender.datastructures.BendNetwork.node_point.html#compas_bender.datastructures.BendNetwork.node_point" title="compas_bender.datastructures.BendNetwork.node_point"><code class="xref py py-obj docutils literal notranslate"><span class="pre">node_point</span></code></a></p></td>
-<td><p></p></td>
+<td><p>Return the point corresponding to the location of a node.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="compas_bender.datastructures.BendNetwork.node_reaction.html#compas_bender.datastructures.BendNetwork.node_reaction" title="compas_bender.datastructures.BendNetwork.node_reaction"><code class="xref py py-obj docutils literal notranslate"><span class="pre">node_reaction</span></code></a></p></td>
-<td><p></p></td>
+<td><p>Return the vector representing the reaction force at an anchored node.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="compas_bender.datastructures.BendNetwork.node_residual.html#compas_bender.datastructures.BendNetwork.node_residual" title="compas_bender.datastructures.BendNetwork.node_residual"><code class="xref py py-obj docutils literal notranslate"><span class="pre">node_residual</span></code></a></p></td>
-<td><p></p></td>
+<td><p>Return the vector representing the residual force at a node.</p></td>
 </tr>
 </tbody>
 </table>
@@ -488,7 +491,7 @@
 </li>
 <li class="toctree-l1 nav-item active"><a class="nav-link reference internal" href="../../api.html">API Reference</a><ul class="nav flex-column collapse show active">
 <li class="toctree-l2 nav-item active"><a class="nav-link reference internal" href="../compas_bender.html">compas_bender</a><ul class="nav flex-column collapse show active">
-<li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="../compas_bender.bender.html">bender</a></li>
+<li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="../compas_bender.bend.html">bend</a></li>
 <li class="toctree-l3 nav-item active"><a class="nav-link reference internal" href="../compas_bender.datastructures.html">datastructures</a></li>
 <li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="../compas_bender.rhino.html">rhino</a></li>
 </ul>

@@ -3,7 +3,7 @@
 
 <head>
   
-  <title>compas_bender - BendNetwork.to_json</title>
+  <title>compas_bender - bend_splines</title>
   
 
   <meta charset="utf-8" />
@@ -20,11 +20,11 @@
   <link rel="stylesheet" type="text/css" href="../../_static/css/compas-reference.css" />
 
   
-  <link rel="next" title="BendNetwork.to_jsonstring" href="compas_bender.datastructures.BendNetwork.to_jsonstring.html" />
+  <link rel="next" title="datastructures" href="../compas_bender.datastructures.html" />
   
 
   
-  <link rel="prev" title="BendNetwork.to_data" href="compas_bender.datastructures.BendNetwork.to_data.html" />
+  <link rel="prev" title="bend" href="../compas_bender.bend.html" />
   
 
   <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
@@ -86,32 +86,32 @@
             
             <li class="breadcrumb-item"><a href="../compas_bender.html">compas_bender</a></li>
             
-            <li class="breadcrumb-item"><a href="../compas_bender.datastructures.html">datastructures</a></li>
+            <li class="breadcrumb-item"><a href="../compas_bender.bend.html">bend</a></li>
             
-            <li class="breadcrumb-item"><a href="compas_bender.datastructures.BendNetwork.html">BendNetwork</a></li>
-            
-            <!-- <li class="breadcrumb-item active" aria-current="page">BendNetwork.to_json</li> -->
+            <!-- <li class="breadcrumb-item active" aria-current="page">bend_splines</li> -->
           </ol>
         </nav>
         
 
         
         
-        <section class="detail" id="bendnetwork-to-json">
-<h1>BendNetwork.to_json</h1>
-<dl class="py method">
-<dt class="sig sig-object py" id="compas_bender.datastructures.BendNetwork.to_json">
-<span class="sig-prename descclassname"><span class="pre">BendNetwork.</span></span><span class="sig-name descname"><span class="pre">to_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pretty</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/blockresearchgroup/compas_bender/blob/master/src/compas_bender/datastructures/bendnetwork.py#L268"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
-<dd><p>Serialize the data representation of an object to a JSON file.</p>
+        <section class="detail" id="bend-splines">
+<h1>bend_splines</h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="compas_bender.bend.bend_splines">
+<span class="sig-prename descclassname"><span class="pre">compas_bender.bend.</span></span><span class="sig-name descname"><span class="pre">bend_splines</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">network</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="compas_bender.datastructures.BendNetwork.html#compas_bender.datastructures.BendNetwork" title="compas_bender.datastructures.bendnetwork.BendNetwork"><span class="pre">BendNetwork</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">cables</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><span class="pre">Optional</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.10)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.10)"><span class="pre">Dict</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">splines</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><span class="pre">Optional</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.10)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.10)"><span class="pre">Dict</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/blockresearchgroup/compas_bender/blob/master/src/compas_bender/bend/bend_splines.py#L30"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Compute the equilibrium configuration of a network of nodes and edges, combined with cables and splines.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>filepath</strong> (<em>path string or file-like object</em>) – The path or file-like object to the file containing the data.</p></li>
-<li><p><strong>pretty</strong> (<em>bool, optional</em>) – If True, serialize to a “pretty”, human-readable representation.</p></li>
+<li><p><strong>network</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">BendNetwork</span></code>)</p></li>
+<li><p><strong>cables</strong> (<em>list[dict], optional</em>)</p></li>
+<li><p><strong>splines</strong> (<em>list[dict], optional</em>)</p></li>
+<li><p><strong>config</strong> (<em>dict, optional</em>)</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><em>None</em></p>
+<dd class="field-even"><p><strong>iterations</strong> (<em>list[dict]</em>)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -143,8 +143,8 @@
 </li>
 <li class="toctree-l1 nav-item active"><a class="nav-link reference internal" href="../../api.html">API Reference</a><ul class="nav flex-column collapse show active">
 <li class="toctree-l2 nav-item active"><a class="nav-link reference internal" href="../compas_bender.html">compas_bender</a><ul class="nav flex-column collapse show active">
-<li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="../compas_bender.bend.html">bend</a></li>
-<li class="toctree-l3 nav-item active"><a class="nav-link reference internal" href="../compas_bender.datastructures.html">datastructures</a></li>
+<li class="toctree-l3 nav-item active"><a class="nav-link reference internal" href="../compas_bender.bend.html">bend</a></li>
+<li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="../compas_bender.datastructures.html">datastructures</a></li>
 <li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="../compas_bender.rhino.html">rhino</a></li>
 </ul>
 </li>
@@ -161,8 +161,8 @@
       <div class="d-none d-xl-block col-xl-2 compas-toc" role="toc">
         
         <ul class="nav flex-column" id="compas-toc">
-<li class="nav-item"><a class="nav-link reference internal" href="#">BendNetwork.to_json</a><ul class="nav flex-column">
-<li class="nav-item"><a class="nav-link reference internal" href="#compas_bender.datastructures.BendNetwork.to_json"><code class="docutils literal notranslate"><span class="pre">BendNetwork.to_json()</span></code></a></li>
+<li class="nav-item"><a class="nav-link reference internal" href="#">bend_splines</a><ul class="nav flex-column">
+<li class="nav-item"><a class="nav-link reference internal" href="#compas_bender.bend.bend_splines"><code class="docutils literal notranslate"><span class="pre">bend_splines()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -176,20 +176,20 @@
   <footer class="compas-footer">
     <nav class="nav p-2">
       
-      <a href="compas_bender.datastructures.BendNetwork.to_data.html" title="BendNetwork.to_data" class="nav-link footer-link float-start text-left d-flex w-50" rel="prev">
+      <a href="../compas_bender.bend.html" title="bend" class="nav-link footer-link float-start text-left d-flex w-50" rel="prev">
         <div class="nav-button p-2 m-2"><i class="fas fa-arrow-left"></i></div>
         <div class="nav-title flex-grow-1 align-self-center">
           <div class="nav-direction small font-weight-light">Previous</div>
-          BendNetwork.to_data
+          bend
         </div>
       </a>
       
 
       
-      <a href="compas_bender.datastructures.BendNetwork.to_jsonstring.html" title="BendNetwork.to_jsonstring" class="nav-link footer-link float-end text-right d-flex w-50" rel="next">
+      <a href="../compas_bender.datastructures.html" title="datastructures" class="nav-link footer-link float-end text-right d-flex w-50" rel="next">
         <div class="nav-title footer-link flex-grow-1 align-self-center">
           <div class="nav-direction small font-weight-light">Next</div>
-          BendNetwork.to_jsonstring
+          datastructures
         </div>
         <div class="nav-button p-2 m-2"><i class="fas fa-arrow-right"></i></div>
       </a>
