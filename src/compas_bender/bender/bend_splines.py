@@ -82,7 +82,7 @@ def bend_splines(network, cables, splines, config=None):
     # sectional properties
     # --------------------------------------------------------------------------
     A = PI * (radius**2 - (radius - thickness) ** 2)  # mm2
-    I = PI * (radius**4 - (radius - thickness) ** 4) / 4.0  # mm4
+    I = PI * (radius**4 - (radius - thickness) ** 4) / 4.0  # noqa: E741
     EA = E * A  # kN
     EI = E * I  # kNmm2
     # --------------------------------------------------------------------------
@@ -183,7 +183,7 @@ def bend_splines(network, cables, splines, config=None):
     # l: edge lengths
     # --------------------------------------------------------------------------
     q = ones((num_e, 1), dtype=float64)
-    l = normrow(C.dot(xyz))
+    l = normrow(C.dot(xyz))  # noqa: E741
     f = q * l
     # --------------------------------------------------------------------------
     # initial values
@@ -304,7 +304,7 @@ def bend_splines(network, cables, splines, config=None):
             dx = v * dt
             xyz[free] = xyz0[free] + dx[free]
             # update
-            l = normrow(C.dot(xyz))
+            l = normrow(C.dot(xyz))  # noqa: E741
             f = q * l
             s = shear()
             r = p + s - Ct.dot(Q).dot(C).dot(xyz)
