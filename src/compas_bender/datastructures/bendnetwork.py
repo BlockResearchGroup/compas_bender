@@ -9,8 +9,15 @@ from compas.datastructures import Network
 
 
 class BendNetwork(Network):
-    def __init__(self):
-        super(BendNetwork, self).__init__()
+    """
+    Extension of the COMPAS network data structure for
+    managing the relationships between the elements of a bending-active structure
+    and their individual attributes.
+
+    """
+
+    def __init__(self, *args, **kwargs):
+        super(BendNetwork, self).__init__(*args, **kwargs)
         self.cables = []
         self.splines = []
         self.default_node_attributes.update(
@@ -46,12 +53,48 @@ class BendNetwork(Network):
         )
 
     def node_point(self, node):
+        """
+        Return the point corresponding to the location of a node.
+
+        Parameters
+        ----------
+        node : int
+
+        Returns
+        -------
+        :class:`compas.geometry.Point`
+
+        """
         return Point(*self.node_attributes(node, "xyz"))
 
     def edge_line(self, edge):
+        """
+        Return the line segment corresponding to an edge.
+
+        Parameters
+        ----------
+        edge : tuple[int, int]
+
+        Returns
+        -------
+        :class:`compas.geometry.Line`
+
+        """
         return Line(self.node_point(edge[0]), self.node_point(edge[1]))
 
     def node_reaction(self, node):
+        """
+        Return the vector representing the reaction force at an anchored node.
+
+        Parameters
+        ----------
+        node : int
+
+        Returns
+        -------
+        :class:`compas.geometry.Vector`
+
+        """
         if not self.node_attribute(node, "is_anchor"):
             return
 
@@ -61,6 +104,18 @@ class BendNetwork(Network):
         return Vector(-rx, -ry, -rz)
 
     def node_residual(self, node):
+        """
+        Return the vector representing the residual force at a node.
+
+        Parameters
+        ----------
+        node : int
+
+        Returns
+        -------
+        :class:`compas.geometry.Vector`
+
+        """
         rx = self.node_attribute(node, "rx")
         ry = self.node_attribute(node, "ry")
         rz = self.node_attribute(node, "rz")

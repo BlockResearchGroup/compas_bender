@@ -1,4 +1,6 @@
 from math import ceil
+from typing import List
+from typing import Dict
 
 from numpy import float64
 from numpy import seterr
@@ -18,12 +20,36 @@ from compas.geometry import cross_vectors
 from compas.geometry import length_vector
 from compas.geometry import length_vector_sqrd
 
+from compas_bender.datastructures import BendNetwork
+
 PI = 3.14159
 
 oldsettings = seterr(all="ignore")
 
 
-def bend_splines(network, cables, splines, config=None):
+def bend_splines(
+    network: BendNetwork,
+    cables: List[Dict] = None,
+    splines: List[Dict] = None,
+    config=None,
+):
+    """
+    Compute the equilibrium configuration of a network of nodes and edges, combined with cables and splines.
+
+    Parameters
+    ----------
+    network : :class:`BendNetwork`
+    cables : list[dict], optional
+    splines : list[dict], optional
+    config : dict, optional
+
+    Returns
+    -------
+    iterations : list[dict]
+
+    """
+    cables = cables or []
+    splines = splines or []
     # --------------------------------------------------------------------------
     # initialise configuration options
     # --------------------------------------------------------------------------
@@ -339,4 +365,5 @@ def bend_splines(network, cables, splines, config=None):
         attr["f"] = f[index, 0]
         attr["l"] = l[index, 0]
         attr["linit"] = linit[index, 0]
+
     return iterations

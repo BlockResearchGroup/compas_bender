@@ -13,23 +13,27 @@ from compas_rhino.artists import NetworkArtist
 
 
 class BendNetworkArtist(NetworkArtist):
+    """
+    Artist for bending-active networks.
+    """
+
     def draw_axial(self, scale=1.0, tol=1e-3):
-        """Draw axial forces as cylinders around the corresponding edges.
+        """
+        Draw axial forces as cylinders around the corresponding edges.
 
         Parameters
         ----------
         scale : float, optional
             Scale for the cylinder radius.
-            Default is ``1.0``.
         tol : float, optional
             Cylinders with a radius (after scaling)
             smaller than this tolerance will not be drawn.
-            Default is ``1e-3``.
 
         Returns
         -------
-        list of guid
+        list[guid]
             The identifiers of the objects that were added to the Rhino model space.
+
         """
         fabs = math.fabs
         cylinders = []
@@ -53,22 +57,22 @@ class BendNetworkArtist(NetworkArtist):
         )
 
     def draw_reactions(self, scale=1.0, tol=1e-3):
-        """Draw reaction forces as force vectors at the anchored nodes.
+        """
+        Draw reaction forces as force vectors at the anchored nodes.
 
         Parameters
         ----------
         scale : float, optional
             Scale for the length of the vectors.
-            Default is ``1.0``.
         tol : float, optional
             Vectors with a length (after scaling)
             smaller than this tolerance will not be drawn.
-            Default is ``1e-3``.
 
         Returns
         -------
-        list of guid
+        list[guid]
             The identifiers of the objects that were added to the Rhino model space.
+
         """
         lines = []
         for node, attr in self.network.nodes_where({"is_anchor": True}, True):
@@ -100,15 +104,7 @@ class BendNetworkArtist(NetworkArtist):
 
     #     Returns
     #     -------
-    #     list of guid
+    #     list[guid]
     #         The identifiers of the objects that were added to the Rhino model space.
     #     """
     #     for spline in self.network.splines:
-
-
-# ==============================================================================
-# Main
-# ==============================================================================
-
-if __name__ == "__main__":
-    pass

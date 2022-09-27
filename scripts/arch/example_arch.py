@@ -8,7 +8,7 @@ from compas.geometry import Cylinder
 from compas.utilities import remap_values
 
 from compas_bender.datastructures import BendNetwork
-from compas_bender.bender import bend_splines
+from compas_bender.bend import bend_splines
 
 from compas_view2.app import App
 from compas_view2.objects import Collection

@@ -9,7 +9,7 @@ compas_bender
 .. toctree::
     :maxdepth: 1
 
-    compas_bender.bender
+    compas_bender.bend
     compas_bender.datastructures
     compas_bender.rhino
 
