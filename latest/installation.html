@@ -91,6 +91,15 @@
         
         <section id="installation">
 <h1>Installation</h1>
+<p><a class="reference internal" href="api/compas_bender.html#module-compas_bender" title="compas_bender"><code class="xref py py-mod docutils literal notranslate"><span class="pre">compas_bender</span></code></a> is not released on PyPI or conda-forge yet,
+so you will have to install from source.</p>
+<div class="language-bash notranslate"><div class="highlight"><pre><button class="btn copy"><i class="far fa-copy"></i></button><code><span></span>conda create -n bender <span class="nv">python</span><span class="o">=</span><span class="m">3</span>.9 git compas compas_occ compas_view2 --yes
+conda activate bender
+git pull https://github.com/BlockResearchGroup/compas_bender.git
+<span class="nb">cd</span> compas_bender
+pip install -e .
+</code></pre></div>
+</div>
 </section>
 
         
@@ -113,7 +122,10 @@
 <li class="toctree-l1 nav-item"><a class="nav-link reference internal" href="index.html">Introduction</a></li>
 <li class="toctree-l1 nav-item active"><a class="nav-link active reference internal" href="#">Installation</a></li>
 <li class="toctree-l1 nav-item"><a class="nav-link reference internal" href="tutorial.html">Tutorial</a></li>
-<li class="toctree-l1 nav-item"><a class="nav-link reference internal" href="examples.html">Examples</a><ul class="simple">
+<li class="toctree-l1 nav-item"><a class="nav-link reference internal" href="examples.html">Examples</a><ul class="nav flex-column collapse">
+<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="examples/example_arch.html">Simple arch supported membrane</a></li>
+<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="examples/example_cantilever.html">Membrane supported by a tied down cantilevering spline</a></li>
+<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="examples/example_roof.html">Membrane roof with supporting arch and two ties</a></li>
 </ul>
 </li>
 <li class="toctree-l1 nav-item"><a class="nav-link reference internal" href="api.html">API Reference</a><ul class="nav flex-column collapse">
