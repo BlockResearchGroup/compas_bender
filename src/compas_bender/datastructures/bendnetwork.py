@@ -14,6 +14,29 @@ class BendNetwork(Network):
     managing the relationships between the elements of a bending-active structure
     and their individual attributes.
 
+    A BendNetwork adds the following default attributes for nodes and edges
+    (there are others, but they are read-only and will be populated by the solvers):
+
+    **nodes**
+
+    * ``is_anchor`` : `False`
+    * ``px`` : `0.0`
+    * ``py`` : `0.0`
+    * ``pz`` : `0.0`
+
+    **edges**
+
+    * ``qpre`` : `1.0`
+    * ``fpre`` : `0.0`
+    * ``lpre`` : `0.0`
+    * ``linit`` : `0.0`
+    * ``E`` : `0.0`
+    * ``radius`` : `0.0`
+    * ``thickness`` : `0.0`
+
+    These attributes define the properties of the struts, ties, cablenets, and bending-active splines in the system.
+    And a re then used by :func:`compas_bender.bend.bend_splines` to solve for equilibrium under the given boundary conditions.
+
     """
 
     def __init__(self, *args, **kwargs):
