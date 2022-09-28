@@ -104,6 +104,27 @@
 <p>Extension of the COMPAS network data structure for
 managing the relationships between the elements of a bending-active structure
 and their individual attributes.</p>
+<p>A BendNetwork adds the following default attributes for nodes and edges
+(there are others, but they are read-only and will be populated by the solvers):</p>
+<p><strong>nodes</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">is_anchor</span></code> : <cite>False</cite></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">px</span></code> : <cite>0.0</cite></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">py</span></code> : <cite>0.0</cite></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">pz</span></code> : <cite>0.0</cite></p></li>
+</ul>
+<p><strong>edges</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">qpre</span></code> : <cite>1.0</cite></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">fpre</span></code> : <cite>0.0</cite></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">lpre</span></code> : <cite>0.0</cite></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">linit</span></code> : <cite>0.0</cite></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">E</span></code> : <cite>0.0</cite></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">radius</span></code> : <cite>0.0</cite></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">thickness</span></code> : <cite>0.0</cite></p></li>
+</ul>
+<p>These attributes define the properties of the struts, ties, cablenets, and bending-active splines in the system.
+And a re then used by <a class="reference internal" href="compas_bender.bend.bend_splines.html#compas_bender.bend.bend_splines" title="compas_bender.bend.bend_splines"><code class="xref py py-func docutils literal notranslate"><span class="pre">compas_bender.bend.bend_splines()</span></code></a> to solve for equilibrium under the given boundary conditions.</p>
 <p class="rubric">Methods</p>
 <table class="autosummary longtable docutils align-default">
 <tbody>
