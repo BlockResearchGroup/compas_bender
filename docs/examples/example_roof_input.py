@@ -11,8 +11,7 @@ from compas.utilities import geometric_key
 from compas.utilities import pairwise
 
 HERE = os.path.dirname(__file__)
-DATA = os.path.join(HERE, "..", "..", "data")
-FILE = os.path.join(DATA, "paper", "cantilever.json")
+FILE = os.path.join(HERE, "example_roof.json")
 
 # ==============================================================================
 # Input
@@ -29,6 +28,9 @@ spline_polylines = compas_rhino.get_polyline_coordinates(guids)
 
 guids = compas_rhino.get_polylines(layer="cables")
 cable_polylines = compas_rhino.get_polyline_coordinates(guids)
+
+guids = compas_rhino.get_lines(layer="ties")
+tie_lines = compas_rhino.get_line_coordinates(guids)
 
 # ==============================================================================
 # Network from lines
@@ -98,9 +100,23 @@ for polyline in cable_polylines:
     cables.append({"start": start, "edges": edges})
 
 # ==============================================================================
+# Identify ties
+# ==============================================================================
+
+ties = []
+
+for a, b in tie_lines:
+    a_gkey = geometric_key(a)
+    b_gkey = geometric_key(b)
+    if a_gkey in gkey_key and b_gkey in gkey_key:
+        u = gkey_key[a_gkey]
+        v = gkey_key[b_gkey]
+        ties.append((u, v))
+
+# ==============================================================================
 # Export
 # ==============================================================================
 
-data = {"network": network, "splines": splines, "cables": cables}
+data = {"network": network, "splines": splines, "cables": cables, "ties": ties}
 
 compas.json_dump(data, FILE)

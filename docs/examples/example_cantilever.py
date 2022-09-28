@@ -21,8 +21,7 @@ from compas_view2.objects import Collection
 from compas_view2.shapes import Arrow
 
 HERE = os.path.dirname(__file__)
-DATA = os.path.join(HERE, "..", "..", "data")
-FILE = os.path.join(DATA, "paper", "cantilever.json")
+FILE = os.path.join(HERE, "example_cantilever.json")
 
 # ==============================================================================
 # Network from file
@@ -141,12 +140,6 @@ for spline in splines:
         aa = a + ma * 0.001
         bb = b + mb * 0.001
         viewer.add(Polygon([a, b, bb, aa]), facecolor=(1, 1, 0))
-        # geometry
-        # line = network.edge_line(edge)
-        # radius = spline["radius"]
-        # pipe = Cylinder(((line.midpoint, line.direction), radius), line.length)
-        # pipes.append(pipe)
-        # pipe_properties.append({"facecolor": Color.blue()})
         # axial force
         force = network.edge_attribute(edge, "f")
         line = network.edge_line((u, v))

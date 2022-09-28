@@ -18,8 +18,7 @@ from compas_view2.objects import Collection
 from compas_view2.shapes import Arrow
 
 HERE = os.path.dirname(__file__)
-DATA = os.path.join(HERE, "..", "..", "data")
-FILE = os.path.join(DATA, "paper", "arch.json")
+FILE = os.path.join(HERE, "example_roof.json")
 
 # ==============================================================================
 # Network from file
@@ -31,20 +30,36 @@ network: BendNetwork = data["network"]
 
 splines = data["splines"]
 cables = data["cables"]
+ties = data["ties"]
 
 for spline in splines:
     spline["edges"] = [(u, v) for u, v in spline["edges"]]
+
+for cable in cables:
+    cable["edges"] = [(u, v) for u, v in cable["edges"]]
+    cable["qpre"] = 7
+
+ties = [(u, v) if network.has_edge(u, v) else (v, u) for u, v in ties]
 
 # ==============================================================================
 # Spline parameters
 # ==============================================================================
 
-splines[0]["E"] = 30
-splines[0]["radius"] = 10
-splines[0]["thickness"] = 10
+for spline in splines:
+    spline["E"] = 30
+    spline["radius"] = 20
+    spline["thickness"] = 5
 
 for key, attr in network.edges(True):
     attr["linit"] = 0
+
+# ==============================================================================
+# Ties
+# ==============================================================================
+
+for edge in ties:
+    line = network.edge_line(edge)
+    network.edge_attribute(edge, "lpre", 0.97 * line.length)
 
 # ==============================================================================
 # Bend
@@ -54,7 +69,7 @@ bend_splines(
     network,
     cables,
     splines,
-    config={"kmax": 5000, "tol1": 1e-2, "tol2": 1e-1, "tol3": 1e-4},
+    config={"kmax": 10000, "tol1": 1e-3, "tol2": 1e-2, "tol3": 1e-4, "alpha": 100},
 )
 
 # ==============================================================================
@@ -89,7 +104,7 @@ for node in network.nodes_where(is_anchor=True):
     forcevector = Vector(*sum_vectors(forcevectors))
     color = Color.green().darkened(50)
     vector = network.node_reaction(node)
-    vector.scale(0.2)
+    vector.scale(0.01)
     if vector.length > 0.1:
         if edgevector.dot(forcevector) > 0:
             position = point
@@ -115,15 +130,9 @@ for spline in splines:
         mb = Vector(*network.node_attributes(v, ["mx", "my", "mz"]))
         a = network.node_point(u)
         b = network.node_point(v)
-        aa = a + ma * 0.03
-        bb = b + mb * 0.03
+        aa = a + ma * 0.001
+        bb = b + mb * 0.001
         viewer.add(Polygon([a, b, bb, aa]), facecolor=(1, 1, 0))
-        # geometry
-        # line = network.edge_line(edge)
-        # radius = spline["radius"]
-        # pipe = Cylinder(((line.midpoint, line.direction), radius), line.length)
-        # pipes.append(pipe)
-        # pipe_properties.append({"facecolor": Color.blue()})
         # axial force
         force = network.edge_attribute(edge, "f")
         line = network.edge_line((u, v))
@@ -134,19 +143,32 @@ for spline in splines:
         pipe_properties.append({"facecolor": color})
     viewer.add(Collection(pipes, pipe_properties))
 
-# for cable in cables:
-#     pipes = []
-#     pipe_properties = []
-#     for edge in cable["edges"]:
-#         index = edge_index[edge]
-#         force = network.edge_attribute(edge, "f")
-#         line = network.edge_line((u, v))
-#         radius = radii[index]
-#         color = Color.red() if force > 0 else Color.blue()
-#         pipe = Cylinder(((line.midpoint, line.direction), radius), line.length)
-#         pipes.append(pipe)
-#         pipe_properties.append({"facecolor": color})
-#     viewer.add(Collection(pipes, pipe_properties))
+for cable in cables:
+    pipes = []
+    pipe_properties = []
+    for edge in cable["edges"]:
+        index = edge_index[edge]
+        force = network.edge_attribute(edge, "f")
+        line = network.edge_line((u, v))
+        radius = radii[index]
+        color = Color.red() if force > 0 else Color.blue()
+        pipe = Cylinder(((line.midpoint, line.direction), radius), line.length)
+        pipes.append(pipe)
+        pipe_properties.append({"facecolor": color})
+    viewer.add(Collection(pipes, pipe_properties))
+
+pipes = []
+pipe_properties = []
+for edge in ties:
+    index = edge_index[edge]
+    force = network.edge_attribute(edge, "f")
+    line = network.edge_line(edge)
+    radius = radii[index]
+    color = Color.red() if force > 0 else Color.blue()
+    pipe = Cylinder(((line.midpoint, line.direction), radius), line.length)
+    pipes.append(pipe)
+    pipe_properties.append({"facecolor": color})
+viewer.add(Collection(pipes, pipe_properties))
 
 viewer.add(network, show_points=False, linewidth=2)
 viewer.show()

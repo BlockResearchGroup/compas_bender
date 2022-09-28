@@ -11,8 +11,7 @@ from compas.utilities import geometric_key
 from compas.utilities import pairwise
 
 HERE = os.path.dirname(__file__)
-DATA = os.path.join(HERE, "..", "..", "data")
-FILE = os.path.join(DATA, "paper", "arch.json")
+FILE = os.path.join(HERE, "example_cantilever.json")
 
 # ==============================================================================
 # Input
@@ -25,7 +24,10 @@ guids = compas_rhino.get_points(layer="points")
 points = compas_rhino.get_point_coordinates(guids)
 
 guids = compas_rhino.get_polylines(layer="splines")
-polylines = compas_rhino.get_polyline_coordinates(guids)
+spline_polylines = compas_rhino.get_polyline_coordinates(guids)
+
+guids = compas_rhino.get_polylines(layer="cables")
+cable_polylines = compas_rhino.get_polyline_coordinates(guids)
 
 # ==============================================================================
 # Network from lines
@@ -54,7 +56,7 @@ for point in points:
 
 splines = []
 
-for polyline in polylines:
+for polyline in spline_polylines:
     start = None
     edges = []
     for a, b in pairwise(polyline):
@@ -72,9 +74,32 @@ for polyline in polylines:
     splines.append({"start": start, "edges": edges})
 
 # ==============================================================================
+# Identify cables
+# ==============================================================================
+
+cables = []
+
+for polyline in cable_polylines:
+    start = None
+    edges = []
+    for a, b in pairwise(polyline):
+        a_gkey = geometric_key(a)
+        b_gkey = geometric_key(b)
+        if a_gkey in gkey_key and b_gkey in gkey_key:
+            u = gkey_key[a_gkey]
+            v = gkey_key[b_gkey]
+            if start is None:
+                start = u
+            if network.has_edge(u, v):
+                edges.append((u, v))
+            else:
+                edges.append((v, u))
+    cables.append({"start": start, "edges": edges})
+
+# ==============================================================================
 # Export
 # ==============================================================================
 
-data = {"network": network, "splines": splines, "cables": []}
+data = {"network": network, "splines": splines, "cables": cables}
 
 compas.json_dump(data, FILE)
