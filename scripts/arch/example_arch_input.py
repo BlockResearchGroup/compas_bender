@@ -3,19 +3,16 @@ from __future__ import absolute_import
 from __future__ import division
 
 import os
-import json
+import compas
 import compas_rhino
 
 from compas_bender.datastructures import BendNetwork
 from compas.utilities import geometric_key
 from compas.utilities import pairwise
 
-from compas_rhino.artists import NetworkArtist
-
-
 HERE = os.path.dirname(__file__)
 DATA = os.path.join(HERE, "..", "..", "data")
-FILE = os.path.join(DATA, "paper", "arch.bender-in")
+FILE = os.path.join(DATA, "paper", "arch.json")
 
 # ==============================================================================
 # Input
@@ -75,22 +72,9 @@ for polyline in polylines:
     splines.append({"start": start, "edges": edges})
 
 # ==============================================================================
-# Visualization
+# Export
 # ==============================================================================
 
-artist = NetworkArtist(network, layer="BenderTest::Network::Input")
-artist.clear_layer()
-artist.draw_nodes(
-    color={key: (255, 0, 0) for key in network.nodes_where({"is_anchor": True})}
-)
-artist.draw_edges(color={key: (0, 255, 255) for key in splines[0]["edges"]})
-artist.redraw()
+data = {"network": network, "splines": splines, "cables": []}
 
-# ==============================================================================
-# Export to bender-in
-# ==============================================================================
-
-with open(FILE, "w") as f:
-    data = {"network": network.to_data(), "splines": splines, "cables": []}
-
-    json.dump(data, f)
+compas.json_dump(data, FILE)
