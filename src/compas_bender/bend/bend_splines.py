@@ -1,25 +1,23 @@
 from math import ceil
-from typing import List
 from typing import Dict
+from typing import List
 
-from numpy import float64
-from numpy import seterr
-from numpy import isinf
-from numpy import isnan
 from numpy import all
 from numpy import array
-from numpy import zeros
+from numpy import float64
+from numpy import isinf
+from numpy import isnan
 from numpy import ones
+from numpy import seterr
+from numpy import zeros
 from numpy.linalg import norm
 from scipy.sparse import diags
-
-from compas.numerical import connectivity_matrix
-from compas.numerical import normrow
 
 from compas.geometry import cross_vectors
 from compas.geometry import length_vector
 from compas.geometry import length_vector_sqrd
-
+from compas.linalg import normrow
+from compas.matrices import connectivity_matrix
 from compas_bender.datastructures import BendNetwork
 
 PI = 3.14159
@@ -61,20 +59,20 @@ def bend_splines(
     # --------------------------------------------------------------------------
     # maps
     # --------------------------------------------------------------------------
-    key_index = network.key_index()
-    uv_index = network.uv_index()
+    node_index = network.node_index()
+    edge_index = network.edge_index()
     # --------------------------------------------------------------------------
     # attribute lists
     # --------------------------------------------------------------------------
     num_v = network.number_of_nodes()
     num_e = network.number_of_edges()
     anchors = list(network.nodes_where({"is_anchor": True}))
-    fixed = [key_index[key] for key in anchors]
+    fixed = [node_index[key] for key in anchors]
     free = list(set(range(num_v)) - set(fixed))
     xyz = network.nodes_attributes("xyz")
     p = network.nodes_attributes(["px", "py", "pz"])
     edges = list(network.edges())
-    edges = [(key_index[u], key_index[v]) for u, v in edges]
+    edges = [(node_index[u], node_index[v]) for u, v in edges]
     qpre = network.edges_attribute("qpre")
     fpre = network.edges_attribute("fpre")  # kN
     lpre = network.edges_attribute("lpre")  # m
@@ -116,19 +114,19 @@ def bend_splines(
     # --------------------------------------------------------------------------
     for cable in cables:
         for edge in cable["edges"]:
-            index = uv_index[edge]
+            index = edge_index[edge]
             qpre[index, 0] = cable["qpre"]
     # --------------------------------------------------------------------------
     # preprocess splines
     # --------------------------------------------------------------------------
     spline_nodes = []
     for spline in splines:
-        spline["vi"] = [key_index[spline["start"]]]
+        spline["vi"] = [node_index[spline["start"]]]
         spline["ei"] = []
         for u, v in spline["edges"]:
-            ui = key_index[u]
-            vi = key_index[v]
-            ei = uv_index[(u, v)]
+            ui = node_index[u]
+            vi = node_index[v]
+            ei = edge_index[(u, v)]
             spline["ei"].append(ei)
             if spline["vi"][-1] == ui:
                 spline["vi"].append(vi)
@@ -165,14 +163,8 @@ def bend_splines(
         spline["E"] = spline["E"] * units.E
         spline["radius"] = spline["radius"] * units.radius
         spline["thickness"] = spline["thickness"] * units.thickness
-        spline["A"] = PI * (
-            spline["radius"] ** 2 - (spline["radius"] - spline["thickness"]) ** 2
-        )
-        spline["I"] = (
-            PI
-            * (spline["radius"] ** 4 - (spline["radius"] - spline["thickness"]) ** 4)
-            / 4.0
-        )
+        spline["A"] = PI * (spline["radius"] ** 2 - (spline["radius"] - spline["thickness"]) ** 2)
+        spline["I"] = PI * (spline["radius"] ** 4 - (spline["radius"] - spline["thickness"]) ** 4) / 4.0
         spline["EA"] = spline["E"] * spline["A"]
         spline["EI"] = spline["E"] * spline["I"]
         for i in spline["ei"]:
@@ -318,11 +310,7 @@ def bend_splines(
             Q = diags([q.ravel()], [0])
             D = Cit.dot(Q).dot(C)
             # relax
-            mass = (
-                0.5
-                * dt**2
-                * Ct2.dot(qpre + q_fpre + q_lpre + EA / linit + 4 * EI / l**3)
-            )
+            mass = 0.5 * dt**2 * Ct2.dot(qpre + q_fpre + q_lpre + EA / linit + 4 * EI / l**3)
             xyz0 = xyz.copy()
             v0 = ca * v.copy()
             dv = rk4()
@@ -346,7 +334,7 @@ def bend_splines(
     # update
     # --------------------------------------------------------------------------
     for key, attr in network.nodes(True):
-        index = key_index[key]
+        index = node_index[key]
         attr["x"] = xyz[index, 0]
         attr["y"] = xyz[index, 1]
         attr["z"] = xyz[index, 2]
@@ -360,7 +348,7 @@ def bend_splines(
         attr["my"] = m[index, 1]
         attr["mz"] = m[index, 2]
     for key, attr in network.edges(True):
-        index = uv_index[key]
+        index = edge_index[key]
         attr["q"] = q[index, 0]
         attr["f"] = f[index, 0]
         attr["l"] = l[index, 0]

@@ -1,11 +1,11 @@
-from __future__ import print_function
 from __future__ import absolute_import
 from __future__ import division
+from __future__ import print_function
 
-from compas.geometry import Vector
-from compas.geometry import Point
-from compas.geometry import Line
 from compas.datastructures import Network
+from compas.geometry import Line
+from compas.geometry import Point
+from compas.geometry import Vector
 
 
 class BendNetwork(Network):

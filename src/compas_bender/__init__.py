@@ -1,24 +1,4 @@
-"""
-********************************************************************************
-compas_bender
-********************************************************************************
-
-.. currentmodule:: compas_bender
-
-
-.. toctree::
-    :maxdepth: 1
-
-    compas_bender.bend
-    compas_bender.datastructures
-    compas_bender.rhino
-
-"""
-
-from __future__ import print_function
-
 import os
-
 
 __author__ = ["tom van mele"]
 __copyright__ = "ETH Zurich - Block Research Group"
