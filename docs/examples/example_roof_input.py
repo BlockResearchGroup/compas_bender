@@ -1,14 +1,15 @@
-from __future__ import print_function
 from __future__ import absolute_import
 from __future__ import division
+from __future__ import print_function
 
 import os
-import compas
+
 import compas_rhino
 
-from compas_bender.datastructures import BendNetwork
+import compas
 from compas.utilities import geometric_key
 from compas.utilities import pairwise
+from compas_bender.datastructures import BendNetwork
 
 HERE = os.path.dirname(__file__)
 FILE = os.path.join(HERE, "example_roof.json")
@@ -38,10 +39,7 @@ tie_lines = compas_rhino.get_line_coordinates(guids)
 
 network = BendNetwork.from_lines(lines)
 
-gkey_key = {
-    geometric_key(network.node_attributes(node, "xyz")): node
-    for node in network.nodes()
-}
+gkey_key = {geometric_key(network.node_attributes(node, "xyz")): node for node in network.nodes()}
 
 # ==============================================================================
 # Identify anchors

@@ -1,14 +1,15 @@
 ********************************************************************************
-compas_bender
+COMPAS Bender
 ********************************************************************************
-
-.. rst-class:: lead
-
-COMPAS extension package for form finding of bending active structures
 
 .. .. figure:: /_images/
      :figclass: figure
      :class: figure-img img-fluid
+
+.. rst-class:: lead
+
+COMPAS Bender provides algorithms and data structures for form finding of bending active structures,
+using a modified version of the Dynamic Relaxation method.
 
 
 Table of Contents

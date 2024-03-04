@@ -3,22 +3,22 @@ from math import fabs
 from turtle import position
 from typing import List
 
-import compas
-from compas.geometry import Line
-from compas.geometry import Cylinder
-from compas.geometry import Vector
-from compas.geometry import Polygon
-from compas.geometry import sum_vectors
-from compas.utilities import remap_values
-from compas.utilities import geometric_key
-from compas.colors import Color
-
-from compas_bender.datastructures import BendNetwork
-from compas_bender.bend import bend_splines
-
 from compas_view2.app import App
 from compas_view2.objects import Collection
 from compas_view2.shapes import Arrow
+
+import compas
+from compas.colors import Color
+from compas.geometry import Cylinder
+
+# from compas.geometry import Line
+from compas.geometry import Polygon
+from compas.geometry import Vector
+from compas.geometry import sum_vectors
+from compas.itertools import remap_values
+from compas.tolerance import TOL
+from compas_bender.bend import bend_splines
+from compas_bender.datastructures import BendNetwork
 
 HERE = os.path.dirname(__file__)
 FILE = os.path.join(HERE, "example_cantilever.json")
@@ -58,11 +58,11 @@ for key, attr in network.edges(True):
 
 ties = []
 
-gkey = geometric_key([5, 10, 0])
+gkey = TOL.geometric_key([5, 10, 0])
 
 for edge in network.edges():
-    a = geometric_key(network.node_point(edge[0]))
-    b = geometric_key(network.node_point(edge[1]))
+    a = TOL.geometric_key(network.node_point(edge[0]))
+    b = TOL.geometric_key(network.node_point(edge[1]))
 
     if a == gkey or b == gkey:
         network.edge_attribute(edge, "lpre", 5.0)
@@ -101,9 +101,7 @@ viewer.add(Collection(anchors, anchor_properties), pointsize=20)
 for node in network.nodes_where(is_anchor=True):
     point = network.node_point(node)
     nbrs = network.neighbors(node)
-    edges = [
-        (node, nbr) if network.has_edge(node, nbr) else (nbr, node) for nbr in nbrs
-    ]
+    edges = [(node, nbr) if network.has_edge((node, nbr)) else (nbr, node) for nbr in nbrs]
     forces = network.edges_attribute("f", keys=edges)
     edgevectors: List[Vector] = [network.node_point(nbr) - point for nbr in nbrs]
     edgevector = Vector(*sum_vectors(edgevectors))
@@ -130,7 +128,7 @@ for spline in splines:
     pipes = []
     pipe_properties = []
     for u, v in spline["edges"]:
-        edge = (u, v) if network.has_edge(u, v) else (v, u)
+        edge = (u, v) if network.has_edge((u, v)) else (v, u)
         index = edge_index[edge]
         # bending moment
         ma = Vector(*network.node_attributes(u, ["mx", "my", "mz"]))
@@ -145,7 +143,7 @@ for spline in splines:
         line = network.edge_line((u, v))
         radius = radii[index]
         color = Color.red() if force > 0 else Color.blue()
-        pipe = Cylinder(((line.midpoint, line.direction), radius), line.length)
+        pipe = Cylinder.from_line_and_radius(line, radius)
         pipes.append(pipe)
         pipe_properties.append({"facecolor": color})
     viewer.add(Collection(pipes, pipe_properties))
@@ -159,7 +157,7 @@ for cable in cables:
         line = network.edge_line((u, v))
         radius = radii[index]
         color = Color.red() if force > 0 else Color.blue()
-        pipe = Cylinder(((line.midpoint, line.direction), radius), line.length)
+        pipe = Cylinder.from_line_and_radius(line, radius)
         pipes.append(pipe)
         pipe_properties.append({"facecolor": color})
     viewer.add(Collection(pipes, pipe_properties))
@@ -172,7 +170,7 @@ for edge in ties:
     line = network.edge_line(edge)
     radius = radii[index]
     color = Color.red() if force > 0 else Color.blue()
-    pipe = Cylinder(((line.midpoint, line.direction), radius), line.length)
+    pipe = Cylinder.from_line_and_radius(line, radius)
     pipes.append(pipe)
     pipe_properties.append({"facecolor": color})
 viewer.add(Collection(pipes, pipe_properties))

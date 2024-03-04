@@ -2,20 +2,19 @@ import os
 from math import fabs
 from typing import List
 
-import compas
-from compas.geometry import Cylinder
-from compas.geometry import Vector
-from compas.geometry import Polygon
-from compas.geometry import sum_vectors
-from compas.utilities import remap_values
-from compas.colors import Color
-
-from compas_bender.datastructures import BendNetwork
-from compas_bender.bend import bend_splines
-
 from compas_view2.app import App
 from compas_view2.objects import Collection
 from compas_view2.shapes import Arrow
+
+import compas
+from compas.colors import Color
+from compas.geometry import Cylinder
+from compas.geometry import Polygon
+from compas.geometry import Vector
+from compas.geometry import sum_vectors
+from compas.utilities import remap_values
+from compas_bender.bend import bend_splines
+from compas_bender.datastructures import BendNetwork
 
 HERE = os.path.dirname(__file__)
 FILE = os.path.join(HERE, "example_arch.json")
@@ -78,9 +77,7 @@ viewer.add(Collection(anchors, anchor_properties), pointsize=20)
 for node in network.nodes_where(is_anchor=True):
     point = network.node_point(node)
     nbrs = network.neighbors(node)
-    edges = [
-        (node, nbr) if network.has_edge(node, nbr) else (nbr, node) for nbr in nbrs
-    ]
+    edges = [(node, nbr) if network.has_edge((node, nbr)) else (nbr, node) for nbr in nbrs]
     forces = network.edges_attribute("f", keys=edges)
     edgevectors: List[Vector] = [network.node_point(nbr) - point for nbr in nbrs]
     edgevector = Vector(*sum_vectors(edgevectors))
@@ -107,7 +104,7 @@ for spline in splines:
     pipes = []
     pipe_properties = []
     for u, v in spline["edges"]:
-        edge = (u, v) if network.has_edge(u, v) else (v, u)
+        edge = (u, v) if network.has_edge((u, v)) else (v, u)
         index = edge_index[edge]
         # bending moment
         ma = Vector(*network.node_attributes(u, ["mx", "my", "mz"]))
@@ -122,7 +119,7 @@ for spline in splines:
         line = network.edge_line((u, v))
         radius = radii[index]
         color = Color.red() if force > 0 else Color.blue()
-        pipe = Cylinder(((line.midpoint, line.direction), radius), line.length)
+        pipe = Cylinder.from_line_and_radius(line, radius)
         pipes.append(pipe)
         pipe_properties.append({"facecolor": color})
     viewer.add(Collection(pipes, pipe_properties))
@@ -136,7 +133,7 @@ for cable in cables:
         line = network.edge_line((u, v))
         radius = radii[index]
         color = Color.red() if force > 0 else Color.blue()
-        pipe = Cylinder(((line.midpoint, line.direction), radius), line.length)
+        pipe = Cylinder.from_line_and_radius(line, radius)
         pipes.append(pipe)
         pipe_properties.append({"facecolor": color})
     viewer.add(Collection(pipes, pipe_properties))
