@@ -35,7 +35,8 @@ class BendNetwork(Network):
     * ``thickness`` : `0.0`
 
     These attributes define the properties of the struts, ties, cablenets, and bending-active splines in the system.
-    And a re then used by :func:`compas_bender.bend.bend_splines` to solve for equilibrium under the given boundary conditions.
+    And a re then used by :func:`compas_bender.bend.bend_splines`
+    to solve for equilibrium under the given boundary conditions.
 
     """
 
