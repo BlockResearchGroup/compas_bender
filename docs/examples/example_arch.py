@@ -1,18 +1,16 @@
 import os
 from math import fabs
-from typing import List
 
-from compas_view2.app import App
-from compas_view2.objects import Collection
-from compas_view2.shapes import Arrow
+from compas_viewer import Viewer
 
 import compas
 from compas.colors import Color
 from compas.geometry import Cylinder
+from compas.geometry import Line
 from compas.geometry import Polygon
 from compas.geometry import Vector
 from compas.geometry import sum_vectors
-from compas.utilities import remap_values
+from compas.itertools import remap_values
 from compas_bender.bend import bend_splines
 from compas_bender.datastructures import BendNetwork
 
@@ -65,44 +63,38 @@ edge_index.update({(v, u): index for (u, v), index in edge_index.items()})
 radii = [fabs(f) for f in network.edges_attribute("f")]
 radii = remap_values(radii, 0.01, 0.2)
 
-viewer = App()
+viewer = Viewer()
 
 anchors = []
-anchor_properties = []
 for node in network.nodes_where(is_anchor=True):
     anchors.append(network.node_point(node))
-    anchor_properties.append({"pointcolor": Color.black(), "pointsize": 50})
-viewer.add(Collection(anchors, anchor_properties), pointsize=20)
+viewer.scene.add(anchors, pointsize=20)
 
+reactions = []
 for node in network.nodes_where(is_anchor=True):
     point = network.node_point(node)
     nbrs = network.neighbors(node)
     edges = [(node, nbr) if network.has_edge((node, nbr)) else (nbr, node) for nbr in nbrs]
     forces = network.edges_attribute("f", keys=edges)
-    edgevectors: List[Vector] = [network.node_point(nbr) - point for nbr in nbrs]
+    edgevectors: list[Vector] = [network.node_point(nbr) - point for nbr in nbrs]
     edgevector = Vector(*sum_vectors(edgevectors))
     forcevectors = [vector.scaled(force) for force, vector in zip(forces, edgevectors)]
     forcevector = Vector(*sum_vectors(forcevectors))
     color = Color.green().darkened(50)
     vector = network.node_reaction(node)
     vector.scale(0.2)
-    if vector.length > 0.1:
-        if edgevector.dot(forcevector) > 0:
-            position = point
-        else:
-            position = point - vector
-        arrow = Arrow(
-            position,
-            vector,
-            head_portion=0.2,
-            head_width=0.07,
-            body_width=0.02,
-        )
-        viewer.add(arrow, u=16, facecolor=color)
+    if edgevector.dot(forcevector) > 0:
+        position = point
+    else:
+        position = point - vector
+    line = Line.from_point_and_vector(position, vector)
+    reactions.append((line, {"linecolor": color, "linewidth": 3}))
+viewer.scene.add(reactions)
 
 for spline in splines:
     pipes = []
-    pipe_properties = []
+    polygons = []
+
     for u, v in spline["edges"]:
         edge = (u, v) if network.has_edge((u, v)) else (v, u)
         index = edge_index[edge]
@@ -113,20 +105,19 @@ for spline in splines:
         b = network.node_point(v)
         aa = a + ma * 0.03
         bb = b + mb * 0.03
-        viewer.add(Polygon([a, b, bb, aa]), facecolor=(1, 1, 0))
+        polygons.append((Polygon([a, b, bb, aa]), {"color": Color.yellow()}))
         # axial force
         force = network.edge_attribute(edge, "f")
         line = network.edge_line((u, v))
-        radius = radii[index]
+        radius = radii[index] * 0.5
         color = Color.red() if force > 0 else Color.blue()
         pipe = Cylinder.from_line_and_radius(line, radius)
-        pipes.append(pipe)
-        pipe_properties.append({"facecolor": color})
-    viewer.add(Collection(pipes, pipe_properties))
+        pipes.append((pipe, {"color": color}))
+    viewer.scene.add(pipes)
+    viewer.scene.add(polygons)
 
 for cable in cables:
     pipes = []
-    pipe_properties = []
     for edge in cable["edges"]:
         index = edge_index[edge]
         force = network.edge_attribute(edge, "f")
@@ -134,9 +125,8 @@ for cable in cables:
         radius = radii[index]
         color = Color.red() if force > 0 else Color.blue()
         pipe = Cylinder.from_line_and_radius(line, radius)
-        pipes.append(pipe)
-        pipe_properties.append({"facecolor": color})
-    viewer.add(Collection(pipes, pipe_properties))
+        pipes.append((pipe, {"color": color}))
+    viewer.scene.add(pipes)
 
-viewer.add(network, show_points=False, linewidth=2)
+viewer.scene.add(network, show_points=False, linewidth=2)
 viewer.show()
